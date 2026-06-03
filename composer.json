@@ -1,5 +1,5 @@
 {
-  "name": "based/momentum-modal",
+  "name": "inventas/momentum-modal",
   "description": "Build dynamic modal dialogs for your Inertia-powered Laravel apps",
   "type": "library",
   "license": "MIT",

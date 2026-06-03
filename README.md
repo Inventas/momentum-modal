@@ -24,11 +24,11 @@ Check out the [demo app](https://modal.advanced-inertia.com) demonstrating the M
 
 ### Laravel
 
-Install the package into your Laravel app. Because this repository is a fork and keeps the original Composer package name for drop-in compatibility, point Composer at the Inventas fork first.
+Install the package into your Laravel app. Until the fork is published on Packagist under its own name, point Composer at the Inventas fork first.
 
 ```bash
 composer config repositories.momentum-modal vcs https://github.com/Inventas/momentum-modal
-composer require based/momentum-modal:dev-master
+composer require inventas/momentum-modal:dev-master
 ```
 
 ### Vue 3
