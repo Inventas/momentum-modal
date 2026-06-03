@@ -4,6 +4,10 @@ Momentum Modal is a Laravel package that lets you implement backend-driven modal
 
 Define modal routes on the backend and dynamically render them when you visit a dialog route.
 
+> This repository is an Inventas-maintained fork of `laravel-shift/momentum-modal`.
+> The upstream fork appears abandoned, so compatibility fixes such as Laravel 13 support are maintained here.
+> The Composer constraints in this fork have been updated to allow Laravel 13.
+
 Check out the [demo app](https://modal.advanced-inertia.com) demonstrating the Modal package in action.
 
 - [**Installation**](#installation)
@@ -20,10 +24,11 @@ Check out the [demo app](https://modal.advanced-inertia.com) demonstrating the M
 
 ### Laravel
 
-Install the package into your Laravel app.
+Install the package into your Laravel app. Because this repository is a fork and keeps the original Composer package name for drop-in compatibility, point Composer at the Inventas fork first.
 
 ```bash
-composer require based/momentum-modal
+composer config repositories.momentum-modal vcs https://github.com/Inventas/momentum-modal
+composer require based/momentum-modal:dev-master
 ```
 
 ### Vue 3
@@ -152,8 +157,6 @@ Momentum is a set of packages designed to improve your experience building Inert
 - [Lock](https://github.com/lepikhinb/momentum-lock) — Frontend package to use Laravel permissions with Inertia
 - [Layout](https://github.com/lepikhinb/momentum-layout) — Persistent layouts for Vue 3 apps
 - [Vite Plugin Watch](https://github.com/lepikhinb/vite-plugin-watch) — Vite plugin to run shell commands on file changes
-
-## Credits
 
 ## Credits
 

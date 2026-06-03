@@ -24,7 +24,7 @@ class TestCase extends TestbenchTestCase
         config()->set('inertia.testing.page_paths', [realpath(__DIR__)]);
     }
 
-    public function defineDatabaseMigrations()
+    protected function defineDatabaseMigrations(): void
     {
         Schema::create('users', function (Blueprint $table) {
             $table->increments('id');
@@ -40,7 +40,7 @@ class TestCase extends TestbenchTestCase
         });
     }
 
-    protected function getPackageProviders($app)
+    protected function getPackageProviders($app): array
     {
         return [
             InertiaServiceProvider::class,

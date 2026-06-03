@@ -1,5 +1,5 @@
 includes:
-    - ./vendor/nunomaduro/larastan/extension.neon
+    - ./vendor/larastan/larastan/extension.neon
 
 parameters:
     paths:
@@ -20,6 +20,3 @@ parameters:
         #    paths:
         #        - tests/*
         # - '#should return \$this#'
-
-    checkMissingIterableValueType: false
-    checkGenericClassInNonGenericObjectType: false

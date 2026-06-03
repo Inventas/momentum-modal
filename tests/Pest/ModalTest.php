@@ -5,9 +5,13 @@ declare(strict_types=1);
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 use Inertia\Testing\AssertableInertia;
 use Momentum\Modal\Tests\Stubs\ExampleController;
 use Momentum\Modal\Tests\Stubs\ExampleMiddleware;
+use Momentum\Modal\Tests\Stubs\Tweet;
+use Momentum\Modal\Tests\Stubs\User;
+
 use function Pest\Laravel\from;
 use function Pest\Laravel\get;
 
@@ -19,6 +23,18 @@ beforeEach(function () {
             Route::get('raw/{user}/{tweet}', [ExampleController::class, 'rawTweet'])->name('raw.users.tweets.show');
             Route::get('{user}', [ExampleController::class, 'user'])->name('users.show');
             Route::get('{user}/{tweet}', [ExampleController::class, 'tweet'])->name('users.tweets.show');
+            Route::get('dialog/{user}/{tweet}', function (User $user, Tweet $tweet) {
+                return Inertia::dialog('Tweets/Show', [
+                    'user' => $user,
+                    'tweet' => $tweet,
+                ])->baseRoute('users.show', $user);
+            })->name('dialog.users.tweets.show');
+            Route::get('stackable/{user}/{tweet}', function (User $user, Tweet $tweet) {
+                return Inertia::render('Tweets/Show', [
+                    'user' => $user,
+                    'tweet' => $tweet,
+                ])->stackable()->baseRoute('users.show', $user);
+            })->name('stackable.users.tweets.show');
 
             Route::get('different/{user}/{tweet}', [ExampleController::class, 'differentParameters'])->name('different.users.tweets.show');
         });
@@ -86,7 +102,7 @@ test('preserve background on non-inertia visits', function () {
         });
 });
 
-test('preserve query string for parent componentы', function () {
+test('preserve query string for parent component', function () {
     $user = user();
     $tweet = tweet($user);
 
@@ -116,5 +132,35 @@ test('route parameters are bound correctly', function () {
                 ->where('user.id', $otherUser->id)
                 ->where('modal.redirectURL', route('users.show', $otherUser))
                 ->where('modal.baseURL', route('users.show', $otherUser));
+        });
+});
+
+test('dialog macro can be rendered', function () {
+    $user = user();
+    $tweet = tweet($user);
+
+    get(route('dialog.users.tweets.show', [$user, $tweet]))
+        ->assertSuccessful()
+        ->assertInertia(function (AssertableInertia $page) use ($user, $tweet) {
+            $page->component('Users/Show')
+                ->where('modal.baseURL', route('users.show', $user))
+                ->where('modal.component', 'Tweets/Show')
+                ->where('modal.props.user.username', $user->username)
+                ->where('modal.props.tweet.body', $tweet->body);
+        });
+});
+
+test('stackable macro can be rendered', function () {
+    $user = user();
+    $tweet = tweet($user);
+
+    get(route('stackable.users.tweets.show', [$user, $tweet]))
+        ->assertSuccessful()
+        ->assertInertia(function (AssertableInertia $page) use ($user, $tweet) {
+            $page->component('Users/Show')
+                ->where('modal.baseURL', route('users.show', $user))
+                ->where('modal.component', 'Tweets/Show')
+                ->where('modal.props.user.username', $user->username)
+                ->where('modal.props.tweet.body', $tweet->body);
         });
 });

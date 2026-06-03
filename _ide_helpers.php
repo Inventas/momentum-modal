@@ -7,22 +7,16 @@ namespace Inertia {
      * @method \Momentum\Modal\Modal modal(string $component, array|\Illuminate\Contracts\Support\Arrayable $props = [])
      * @method \Momentum\Modal\Modal dialog(string $component, array|\Illuminate\Contracts\Support\Arrayable $props = [])
      */
-    class ResponseFactory
-    {
-    }
+    class ResponseFactory {}
 
     /**
      * @method \Momentum\Modal\Modal stackable()
      */
-    class Response
-    {
-    }
+    class Response {}
 
     /**
      * @method static \Momentum\Modal\Modal modal(string $component, array|\Illuminate\Contracts\Support\Arrayable $props = [])
      * @method static \Momentum\Modal\Modal dialog(string $component, array|\Illuminate\Contracts\Support\Arrayable $props = [])
      */
-    class Inertia
-    {
-    }
+    class Inertia {}
 }

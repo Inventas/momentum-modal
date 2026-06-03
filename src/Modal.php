@@ -15,10 +15,17 @@ class Modal implements Responsable
 {
     protected string $baseURL;
 
+    /** @var array<array-key, mixed>|Arrayable<array-key, mixed> */
+    protected array|Arrayable $props;
+
+    /**
+     * @param  array<array-key, mixed>|Arrayable<array-key, mixed>  $props
+     */
     public function __construct(
         protected string $component,
-        protected array|Arrayable $props = []
+        array|Arrayable $props = []
     ) {
+        $this->props = $props;
     }
 
     public function baseRoute(string $name, mixed $parameters = [], bool $absolute = true): static
@@ -40,6 +47,9 @@ class Modal implements Responsable
         return $this;
     }
 
+    /**
+     * @param  array<array-key, mixed>  $props
+     */
     public function with(array $props): static
     {
         $this->props = $props;
@@ -49,12 +59,10 @@ class Modal implements Responsable
 
     public function render(): mixed
     {
-        /** @phpstan-ignore-next-line */
         inertia()->share(['modal' => $this->component()]);
 
         // render background component on first visit
         if (request()->header('X-Inertia') && request()->header('X-Inertia-Partial-Component')) {
-            /** @phpstan-ignore-next-line */
             return inertia()->render(request()->header('X-Inertia-Partial-Component'));
         }
 
@@ -101,6 +109,16 @@ class Modal implements Responsable
         );
     }
 
+    /**
+     * @return array{
+     *     component: string,
+     *     baseURL: string,
+     *     redirectURL: string,
+     *     props: array<array-key, mixed>|Arrayable<array-key, mixed>,
+     *     key: string,
+     *     nonce: string
+     * }
+     */
     protected function component(): array
     {
         return [

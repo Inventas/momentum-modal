@@ -12,16 +12,30 @@ on:
 
 jobs:
   pest:
-    name: Tests (Pest) L${{ matrix.laravel }}
+    name: Tests (Pest) PHP ${{ matrix.php }} / Laravel ${{ matrix.laravel }}
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        laravel: [8, 9]
+        php: ["8.3"]
+        laravel: ["13.0"]
+        inertia: ["3.0"]
+        testbench: ["11.0"]
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+      - name: Resolve Laravel 13 test matrix
+        run: |
+          composer require --no-interaction --no-update \
+            "illuminate/support:^${{ matrix.laravel }}" \
+            "inertiajs/inertia-laravel:^${{ matrix.inertia }}" \
+            "orchestra/testbench:^${{ matrix.testbench }}"
       - name: Install composer dependencies
-        run: composer require "illuminate/support:^${{ matrix.laravel }}.0"
+        run: composer update --prefer-dist --no-interaction --no-progress
       - name: Run tests
         run: vendor/bin/pest
 
@@ -30,8 +44,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3"
+          coverage: none
       - name: Install composer dependencies
-        run: composer install
+        run: composer update --prefer-dist --no-interaction --no-progress
       - name: Run phpstan
         run: vendor/bin/phpstan analyse

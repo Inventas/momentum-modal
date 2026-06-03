@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Momentum\Modal\Tests\Stubs\Tweet;
 use Momentum\Modal\Tests\Stubs\User;
 
-uses(Momentum\Modal\Tests\TestCase::class)->in('Pest');
+pest()->extend(Momentum\Modal\Tests\TestCase::class)->in('Pest');
 
 function user(): User
 {
